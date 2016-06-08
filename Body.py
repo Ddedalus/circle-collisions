@@ -1,5 +1,3 @@
-import numpy
-
 class Body:
 	def __init__(self, mas, radius, x=0.0, y=0.0, vx=0.0, vy=0.0):
 		# pass 2D values as list/tuple?
@@ -11,7 +9,7 @@ class Body:
 		self.new_vx, self.new_vy = None, None
 
 	def pos(self):
-		return numpy.array([self.x, self.y])
+		return [self.x, self.y]
 
 	def step(self):
 		self.x, self.y = self.new_x, self.new_y

@@ -1,9 +1,5 @@
-import numpy as np
 from Body import *
-
-bill = Body(1, 1, x=0, y=0, vx=0, vy=1)
-ring = Body(1, 4, x=0, y=0, vx=0, vy=0)
-pos_b = [np.array([bill.x, bill.y])]
+import math
 
 
 def collide(b, r):
@@ -18,20 +14,20 @@ def collide(b, r):
 		print("Negative discriminant:", D, "no ongoing collision...")
 		return 1
 
-	t1 = (-B + np.sqrt(D)) * 0.5 / A
-	t2 = (-B - np.sqrt(D)) * 0.5 / A
-	t = np.maximum(t1, t2)
+	t1 = (-B + math.sqrt(D)) * 0.5 / A
+	t2 = (-B - math.sqrt(D)) * 0.5 / A
+	t = max(t1, t2)
 
 	for k in [b, r]:
 		k.new_x, k.new_y = k.x + t * k.vx, k.y + t * k.vy
 
-	sin_f = (b.new_x - r.new_x) / np.sqrt(len_sq(b, r, new=True))
-	cos_f = (b.new_y - r.new_y) / np.sqrt(len_sq(b, r, new=True))
+	sin_f = (b.new_x - r.new_x) / math.sqrt(len_sq(b, r, new=True))
+	cos_f = (b.new_y - r.new_y) / math.sqrt(len_sq(b, r, new=True))
 	# angle between x-y and d-e coordinates
 	# d is tangent to both circles in point of collision
 
 	for k in [b, r]:
-		k.vd = k.vx * cos_f + k.vy * sin_f
+		k.vd = k.vx * cos_f - k.vy * sin_f
 		k.ve = k.vx * sin_f + k.vy * cos_f
 	# velocities in new coordinates
 
@@ -40,7 +36,7 @@ def collide(b, r):
 
 	for k in [b, r]:
 		k.new_vx = k.vd * cos_f + k.we * sin_f
-		k.new_vy = k.vd * sin_f + k.we * cos_f
+		k.new_vy = - k.vd * sin_f + k.we * cos_f
 
 	pos = b.pos()
 	b.step()
@@ -49,6 +45,12 @@ def collide(b, r):
 	r.step()
 	return pos
 
-for i in range(50):
-	pos_b.append(collide(bill, ring))
-	print(pos_b[-1])
+def switch_to_masspoint(b, r):
+	vx = (b.m * b.vx + r.m * r.vx) / (b.m + r.m)
+	vy = (b.m * b.vy + r.m * r.vy) / (b.m + r.m)
+	for k in [b,r]:
+		k.vx -= vx
+		k.vy -= vy
+
+	return b, r
+

@@ -25,8 +25,8 @@ def collide(b, r):
 	for k in [b, r]:
 		k.new_x, k.new_y = k.x + t * k.vx, k.y + t * k.vy
 
-	sin_f = (b.new_x - r.new_y) / np.sqrt(len_sq(b, r, new=True))
-	cos_f = (b.new_y - r.new_y) / np.sqrt(len_sq(b, r, new=True))
+	sin_f = (b.new_y - r.new_y) / np.sqrt(len_sq(b, r, new=True))
+	cos_f = (b.new_x - r.new_x) / np.sqrt(len_sq(b, r, new=True))
 	# angle between x-y and d-e coordinates
 	# d is tangent to both circles in point of collision
 

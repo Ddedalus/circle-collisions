@@ -16,7 +16,7 @@ class Body:
 		self.new_v, self.new_pos = None, None
 
 	def v_sq(self):
-		return self.v[0] ** 2 + self.v[1] ** 2
+		return np.linalg.norm(self.v) ** 2
 
 
 def len_sq(body1, body2, new=False):

@@ -7,4 +7,4 @@ pos_b = [bill.pos]
 
 for i in range(50):
 	pos_b.append(collide(bill, ring))
-	# print(pos_b[-1])
+	print(pos_b[-1])

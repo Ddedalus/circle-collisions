@@ -1,27 +1,27 @@
-class Body:
-	def __init__(self, mas, radius, x=0.0, y=0.0, vx=0.0, vy=0.0):
-		# pass 2D values as list/tuple?
-		"""mas, radius, x, y, vx, vy"""
-		self.m, self.r = mas, radius
-		self.x, self.y = x,y
-		self.vx, self.vy = vx, vy
-		self.new_x, self.new_y = None, None
-		self.new_vx, self.new_vy = None, None
+import numpy as np
 
-	def pos(self):
-		return [self.x, self.y]
+
+class Body:
+	def __init__(self, mas, radius, position=[0.0, 0.0], velocity=[0.0, 0.0]):
+		"""m, r, pos, v"""
+		self.m, self.r = mas, radius
+		self.pos = np.array(position)
+		self.v = np.array(velocity)
+		self.new_pos = None		# should be defined as np.array's
+		self.new_v = None
 
 	def step(self):
-		self.x, self.y = self.new_x, self.new_y
-		self.vx, self.vy = self.new_vx, self.new_vy
-		self.new_vx, self.new_vy, self.new_y, self.new_x = None, None, None, None
+		self.pos = self.new_pos
+		self.v = self.new_v
+		self.new_v, self.new_pos = None, None
 
 	def v_sq(self):
-		return self.vx**2 + self.vy**2
+		return self.v[0] ** 2 + self.v[1] ** 2
 
 
 def len_sq(body1, body2, new=False):
 	if new:
-		return (body1.new_x - body2.new_x) ** 2 + (body1.new_y - body2.new_y) ** 2
+		return (body1.new_pos[0] - body2.new_pos[0]) ** 2 + (body1.new_pos[1] - body2.new_pos[1]) ** 2
 	else:
-		return (body1.x - body2.x) ** 2 + (body1.y - body2.y) ** 2
+		return (body1.pos[0] - body2.pos[0]) ** 2 + (body1.pos[1] - body2.pos[1]) ** 2
+		

@@ -54,6 +54,6 @@ def switch_to_masspoint(b, r):
 	vy = (b.m * b.v[1] + r.m * r.v[1]) / (b.m + r.m)
 	
 	for k in [b, r]:
-		k.v -= np.array([vx, vy])
+		k.v = k.v - np.array([vx, vy])
 	
 	return b, r

@@ -2,9 +2,9 @@ import numpy as np
 
 
 class Body:
-	def __init__(self, mas, radius, position=[0.0, 0.0], velocity=[0.0, 0.0]):
+	def __init__(self, mass, radius, position=[0.0, 0.0], velocity=[0.0, 0.0]):
 		"""m, r, pos, v"""
-		self.m, self.r = mas, radius
+		self.m, self.r = mass, radius
 		self.pos = np.array(position)
 		self.v = np.array(velocity)
 		self.new_pos = None		# should be defined as np.array's
@@ -16,12 +16,12 @@ class Body:
 		self.new_v, self.new_pos = None, None
 
 	def v_sq(self):
-		return self.v[0] ** 2 + self.v[1] ** 2
+		return np.linalg.norm(self.v) ** 2
 
 
 def len_sq(body1, body2, new=False):
 	if new:
 		return (body1.new_pos[0] - body2.new_pos[0]) ** 2 + (body1.new_pos[1] - body2.new_pos[1]) ** 2
 	else:
-		return (body1.pos[0] - body2.pos[0]) ** 2 + (body1.pos[1] - body2.pos[1]) ** 2
+		sreturn (body1.pos[0] - body2.pos[0]) ** 2 + (body1.pos[1] - body2.pos[1]) ** 2
 		

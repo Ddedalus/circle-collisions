@@ -3,7 +3,7 @@ import math
 
 
 def collide(b, r):
-	# mas, radius, x, y, vx, vy
+	# mass, radius, x, y, vx, vy
 
 	A = b.v_sq() + r.v_sq() - 2 * (b.vx * r.vx + b.vy * r.vy)
 	B = 2 * ((b.x - r.x) * (b.vx - r.vx) + (b.y - r.y) * (b.vy - r.vy))
@@ -45,7 +45,8 @@ def collide(b, r):
 	r.step()
 	return pos
 
-def switch_to_masspoint(b, r):
+
+def switch_to_massspoint(b, r):
 	vx = (b.m * b.vx + r.m * r.vx) / (b.m + r.m)
 	vy = (b.m * b.vy + r.m * r.vy) / (b.m + r.m)
 	for k in [b,r]:

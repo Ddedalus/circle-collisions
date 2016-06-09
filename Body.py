@@ -1,8 +1,8 @@
 class Body:
-	def __init__(self, mas, radius, x=0.0, y=0.0, vx=0.0, vy=0.0):
+	def __init__(self, mass, radius, x=0.0, y=0.0, vx=0.0, vy=0.0):
 		# pass 2D values as list/tuple?
-		"""mas, radius, x, y, vx, vy"""
-		self.m, self.r = mas, radius
+		"""mass, radius, x, y, vx, vy"""
+		self.m, self.r = mass, radius
 		self.x, self.y = x,y
 		self.vx, self.vy = vx, vy
 		self.new_x, self.new_y = None, None

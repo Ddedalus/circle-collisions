@@ -18,10 +18,11 @@ class Body:
 	def v_sq(self):
 		return np.linalg.norm(self.v) ** 2
 
+	def radius(self):
+		return np.linalg.norm(self.pos)
 
 def len_sq(body1, body2, new=False):
 	if new:
 		return (body1.new_pos[0] - body2.new_pos[0]) ** 2 + (body1.new_pos[1] - body2.new_pos[1]) ** 2
 	else:
-		sreturn (body1.pos[0] - body2.pos[0]) ** 2 + (body1.pos[1] - body2.pos[1]) ** 2
-		
+		return (body1.pos[0] - body2.pos[0]) ** 2 + (body1.pos[1] - body2.pos[1]) ** 2

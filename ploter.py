@@ -6,7 +6,7 @@ def plot_bodies(b1, b2):
 	fig = plt.figure()
 	plt.axis('equal')
 	ax = fig.add_subplot(111)
-	print(b1.pos[0], b1.pos[1])
+	print('Pos b1:', b1.pos)
 	c1 = Circle((b1.pos[0], b1.pos[1]), radius=b1.r, fill=False, color='g')
 	c2 = Circle((b2.pos[0], b2.pos[1]), radius=b2.r, fill=False, color='r')
 

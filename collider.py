@@ -35,8 +35,8 @@ def collide(b, r):
 	# velocities in new coordinates
 
 	# collision
-	we_b = (b.u[1] * (r.m - b.m) + 2 * r.m * r.u[1]) / (b.m + r.m)
-	we_r = (r.u[1] * (b.m - r.m) + 2 * b.m * b.u[1]) / (b.m + r.m)
+	we_b = (b.u[1] * (b.m - r.m) + 2 * r.m * r.u[1]) / (b.m + r.m)
+	we_r = (r.u[1] * (r.m - b.m) + 2 * b.m * b.u[1]) / (b.m + r.m)
 	b.u[1] = we_b
 	r.u[1] = we_r
 	for k in [b, r]:
@@ -55,5 +55,7 @@ def switch_to_masspoint(b, r):
 	
 	for k in [b, r]:
 		k.v = k.v - np.array([vx, vy])
-	
-	return b, r
+
+def summary_momentum(bill, ring):
+	return bill.v * bill.m + ring.v * ring.m
+

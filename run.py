@@ -1,12 +1,15 @@
 from collider import *
+from ploter import *
 
 
-bill = Body(1, 1, x=0, y=0, vx=1, vy=1)
-ring = Body(2, 4, x=0, y=0, vx=0, vy=0)
-pos_b = [[bill.x, bill.y]]
+bill = Body(1., 1, [0., 0.], [0., 1.])
+ring = Body(2., 4, [0., 0.], [0., 0.])
+init_angle(bill, ring, 0.5)
+switch_to_masspoint(bill, ring)
 
-switch_to_massspoint(bill, ring)
+pos_b, rad_b = run(bill, ring, 50)
 
-for i in range(50):
-	pos_b.append(collide(bill, ring))
-	print(pos_b[-1])
+pos_b, rad_b = run(bill, ring, 50)
+
+plot_vs_collision(rad_b, 51, "Radius")
+plot_pos(pos_b)

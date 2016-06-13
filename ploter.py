@@ -20,4 +20,16 @@ def plot_bodies(b1, b2):
 def plot_pos(pos_b):
 	plt.plot(*zip(*pos_b))
 	plt.axis('equal')
+	plt.title("Position graph")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.show()
+
+
+def plot_vs_collision(data, length, title='Data'):
+	plt.title(title + ' vs collision number')
+	plt.plot(range(length), data)
+	plt.axis('equal')
+	plt.xlabel('collision')
+	plt.ylabel(title.lower())
 	plt.show()

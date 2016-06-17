@@ -1,10 +1,10 @@
-from Body import *
+# -*- coding: utf-8 -*-from Body import *
 import numpy as np
-from numpy.linalg import inv
+from numpy.linalg import inv, norm
 import math
 
 
-def collide(b, r):
+def collide_inertial(b, r):
 	# mass, radius, x, y, vx, vy
 
 	A = b.v_sq() + r.v_sq() - 2 * np.dot(b.v, r.v)
@@ -48,7 +48,57 @@ def collide(b, r):
 	b.u, r.u = None, None
 	r.step()
 	return pos
+	
+	
+# ----------------------------------------------------------------------------- #
+# -------------------------       colide rigid     ---------------------------- #
+# ----------------------------------------------------------------------------- #
 
+
+def collide_rigid(b, r):
+	"""Mass of ring is infinite, and it's speed is zero"""
+	
+	print("Mass of ring treated now as infinite. No changes in object have been made")
+	if norm(r.v) != 0.:
+		print ('Warning, ignoring ring velocity!')
+	
+	print('Velocity of b', b.v)
+	if norm(b.v) == 0.:
+		print ('Error, zero bill velocity!')
+		return 1
+	
+	A = norm(b.v)**2
+	B = 2 * (b.v[0] + b.v[1])
+	C = (norm(b.pos))**2 - (r.r - b.r)**2
+	D = B**2 - 4 * A * C        # discriminant of L**2 = (b.r - r.r)**2
+	print(A, B, C, D)
+	t1 = (-B + D**0.5) * 0.5 / A
+	t2 = (-B - D**0.5) * 0.5 / A
+	t = max(t1, t2)
+
+	b.new_pos = b.pos + t * b.v
+	
+	# not sure which angle it actualy is...
+	sin_f = b.new_pos[0] / norm(b.new_pos)
+	cos_f = b.new_pos[1] / norm(b.new_pos)
+	# angle between x-y and d-e coordinates
+	# d is tangent to both circles in point of collision
+	xy_to_de = np.array([[cos_f, - sin_f], [sin_f, cos_f]])
+	de_to_xy = inv(xy_to_de)
+	# coordinates transformation matrix
+
+	b.u = np.dot(xy_to_de, b.v)
+	b.u[1] = - b.u[1]
+	# velocity in new coordinates, collision on line e
+	
+	b.new_v = np.dot(de_to_xy, b.u)
+	print('b.new_v=', b.new_v)
+	# collision, check this twice
+
+	pos = b.pos
+	b.step()
+	b.u = None
+	return pos
 
 def switch_to_masspoint(b, r):
 	vx = (b.m * b.v[0] + r.m * r.v[0]) / (b.m + r.m)
@@ -80,7 +130,7 @@ def summary_momentum(bill, ring):
 	return bill.v * bill.m + ring.v * ring.m
 
 
-def run(bill, ring, it=10):
+def run_inertial(bill, ring, it=10):
 	pos_b = [bill.pos]
 	rad_b = [np.linalg.norm(bill.pos)]
 	print('Pęd układu:', summary_momentum(bill, ring))

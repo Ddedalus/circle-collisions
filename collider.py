@@ -140,14 +140,16 @@ def summary_momentum(bill, ring):
 def run_inertial(bill, ring, it=10):
 	pos_b = [bill.pos]
 	rad_b = [np.linalg.norm(bill.pos)]
-	print('Pęd układu:', summary_momentum(bill, ring))
+	b = copy.copy(bill)
+	r = copy.copy(ring)
+	switch_to_masspoint(b, r)
 
 	for i in range(it):
-		collide_inertial(bill, ring)
-		pos_b.append(bill.pos)
-		rad_b.append(np.linalg.norm(bill.pos))
+		b, r = collide_inertial(b, r)
+		pos_b.append(b.pos)
+		# rad_b.append(np.linalg.norm(bill.pos))
 
 	# print(pos_b[-1])
 	# print('Radius:', bill.radius())
 
-	return pos_b, rad_b
+	return pos_b

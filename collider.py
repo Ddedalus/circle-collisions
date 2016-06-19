@@ -2,9 +2,13 @@
 import numpy as np
 from numpy.linalg import inv, norm
 import math
+import copy
+from Body import len_sq
 
 
-def collide_inertial(b, r):
+def collide_inertial(bill, ring):
+	b = copy(bill)
+	r = copy(ring)
 	# mass, radius, x, y, vx, vy
 
 	A = b.v_sq() + r.v_sq() - 2 * np.dot(b.v, r.v)
@@ -47,17 +51,20 @@ def collide_inertial(b, r):
 	b.step()
 	b.u, r.u = None, None
 	r.step()
-	return pos
+	return b, r
 	
 	
 # ----------------------------------------------------------------------------- #
-# -------------------------       colide rigid     ---------------------------- #
+# -------------------------      collide rigid     ---------------------------- #
 # ----------------------------------------------------------------------------- #
 
 
-def collide_rigid(b, r):
+def collide_rigid(bill, ring):
 	"""Mass of ring is infinite, and it's speed is zero"""
-	
+
+	b = copy(bill)
+	r = copy(ring)
+
 	print("Mass of ring treated now as infinite. No changes in object have been made")
 	if norm(r.v) != 0.:
 		print ('Warning, ignoring ring velocity!')
@@ -98,7 +105,7 @@ def collide_rigid(b, r):
 	pos = b.pos
 	b.step()
 	b.u = None
-	return pos
+	return b, r
 
 def switch_to_masspoint(b, r):
 	vx = (b.m * b.v[0] + r.m * r.v[0]) / (b.m + r.m)
@@ -136,7 +143,7 @@ def run_inertial(bill, ring, it=10):
 	print('Pęd układu:', summary_momentum(bill, ring))
 
 	for i in range(it):
-		collide(bill, ring)
+		collide_inertial(bill, ring)
 		pos_b.append(bill.pos)
 		rad_b.append(np.linalg.norm(bill.pos))
 

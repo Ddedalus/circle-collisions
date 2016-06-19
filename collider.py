@@ -7,8 +7,8 @@ from Body import len_sq
 
 
 def collide_inertial(bill, ring):
-	b = copy(bill)
-	r = copy(ring)
+	b = copy.copy(bill)
+	r = copy.copy(ring)
 	# mass, radius, x, y, vx, vy
 
 	A = b.v_sq() + r.v_sq() - 2 * np.dot(b.v, r.v)
@@ -47,7 +47,6 @@ def collide_inertial(bill, ring):
 	for k in [b, r]:
 		k.new_v = np.dot(de_to_xy, k.u)
 
-	pos = b.pos
 	b.step()
 	b.u, r.u = None, None
 	r.step()
@@ -62,21 +61,21 @@ def collide_inertial(bill, ring):
 def collide_rigid(bill, ring):
 	"""Mass of ring is infinite, and it's speed is zero"""
 
-	b = copy(bill)
-	r = copy(ring)
+	b = copy.copy(bill)
+	r = copy.copy(ring)
 	b.pos -= r.pos  # switch to center of ring
 
 	print("Mass of ring treated now as infinite. No changes in object have been made")
 	if norm(r.v) != 0.:
-		print ('Warning, ignoring ring velocity!')
+		print('Warning, ignoring ring velocity!')
 	
 	print('Velocity of b', b.v)
 	if norm(b.v) == 0.:
-		print ('Error, zero bill velocity!')
+		print('Error, zero bill velocity!')
 		return 1
 	
 	A = norm(b.v)**2
-	B = 2 * (b.v[0] + b.v[1])
+	B = 2 * (b.pos[0] * b.v[0] + b.pos[1] * b.v[1])
 	C = (norm(b.pos))**2 - (r.r - b.r)**2
 	D = B**2 - 4 * A * C        # discriminant of L**2 = (b.r - r.r)**2
 	print(A, B, C, D)
@@ -107,6 +106,7 @@ def collide_rigid(bill, ring):
 	b.step()
 	b.u = None
 	return b, r
+
 
 def switch_to_masspoint(b, r):
 	vx = (b.m * b.v[0] + r.m * r.v[0]) / (b.m + r.m)

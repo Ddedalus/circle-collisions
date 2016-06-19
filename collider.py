@@ -64,6 +64,7 @@ def collide_rigid(bill, ring):
 
 	b = copy(bill)
 	r = copy(ring)
+	b.pos -= r.pos  # switch to center of ring
 
 	print("Mass of ring treated now as infinite. No changes in object have been made")
 	if norm(r.v) != 0.:

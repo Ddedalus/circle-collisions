@@ -9,16 +9,20 @@ def plot_bodies(b1, b2, title = 'Position'):
 	plt.axis('equal')
 	plt.title(title)
 	ax = fig.add_subplot(111)
-	# print('Pos b1:', b1.pos)
+
+	p1 = Circle((b1.pos[0], b1.pos[1]), radius=0.1, fill=True, color='g')
+	p2 = Circle((b2.pos[0], b2.pos[1]), radius=0.1, fill=True, color='r')
 	c1 = Circle((b1.pos[0], b1.pos[1]), radius=b1.r, fill=False, color='g')
 	c2 = Circle((b2.pos[0], b2.pos[1]), radius=b2.r, fill=False, color='r')
 
 	ax.add_patch(c1)
 	ax.add_patch(c2)
+	ax.add_patch(p1)
+	ax.add_patch(p2)
 
 	ax.autoscale_view()
 	#ax.figure.canvas.draw()
-	plt.savefig('position test.png')
+	plt.savefig('position graph.png')
 	plt.close()
 
 

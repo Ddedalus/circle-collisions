@@ -2,49 +2,57 @@
 from collider import *
 from ploter import *
 from Body import *
-from numpy.linalg import norm
-import math
+import copy
 
-it = 100
-bill_0 = Body(1., 1., [0., 0.], [1., 1.])
+it = 20
+bill_0 = Body(1., 0., [0., 0.], [1., 1.])
 ring_0 = Body(2., 4., [0., 0.], [0., 0.])
-switch_to_masspoint(bill_0, ring_0)
-init_angle(bill_0, ring_0, math.pi/8.0)
+
+init_angle(bill_0, ring_0, math.pi / 3.0)
 plot_bodies(bill_0, ring_0, 'Initial position')
 
-def angle(pos1, pos2, pos3):
-	cos = -0.5 * (norm(pos1 - pos3) ** 2 - norm(pos1 - pos2) ** 2 - norm(pos2 - pos3) ** 2) / (norm(
-		pos1 - pos2) * norm(pos2 - pos3))
-	return math.acos(cos)
+bill_i, ring_i = copy.copy(bill_0), copy.copy(ring_0)
+bill_r, ring_r = copy.copy(bill_0), copy.copy(ring_0)
+switch_to_masspoint(bill_i, ring_i)
+
+pos_rigid = [bill_r.pos]
+pos_inertial = [bill_i.pos]
+
+for i in range(it):
+	bill_r, ring_r = collide_rigid(bill_r, ring_r)
+	bill_i, ring_i = collide_inertial(bill_i, ring_i)
+	pos_rigid.append(list(bill_r.pos))
+	pos_inertial.append(bill_i.pos)
 
 
-bill_0 = Body(1., 1, [1., 1.], [2., 1.])
-ring_0 = Body(2., 4, [0., 0.], [0., 0.])
-# init_angle(bill, ring, 0.5)
-# switch_to_masspoint(bill, ring)
+# plot paths
+def ploter():
+	plt.plot(*zip(*pos_rigid), color='r')
+	plt.axis('equal')
+	plt.title("Rigid path graph")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.savefig('pos rigid.png')
+	plt.plot(*zip(*pos_inertial), color='b')
+	plt.savefig('pos both.png')
 
-# pos_b, rad_b = run(bill, ring, 50)
-def run_rigid():
-	pos_rigid = [bill_0.pos]
-	bill, ring = bill_0, ring_0
-	for i in range(10):
-		bill, ring = collide_rigid(bill, ring)
-		pos_rigid.append(bill.pos)
-		print('New position:', bill.pos)
-	# print('New velocity:', bill.v)
+	plt.close()
 
-	# plot_vs_collision(rad_b, 51, "Radius")
-	plot_pos(pos_rigid)
-
-	angles = []
-	for i in range(1, 9):
-		angles.append(angle(pos_rigid[i-1], pos_rigid[i], pos_rigid[1+i]))
-
-	plot_vs_collision(angles, len(angles))
+	plt.plot(*zip(*pos_inertial), color='b')
+	plt.axis('equal')
+	plt.title("Inertial path graph")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.savefig('pos inertial.png')
+	plt.close()
 
 
-pos_inertial = run_inertial(bill_0, ring_0, 50)
-angles = []
-for i in range(1, 49):
-	angles.append(angle(pos_inertial[i-1], pos_inertial[i], pos_inertial[1+i]))
-plot_vs_collision(angles, len(angles), 'Angle in inertial')
+# ploter()
+def ploter2():
+	plt.plot(*zip(*pos_inertial), color='r')
+	plt.axis('equal')
+	plt.title("pi/8 path graph")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.savefig('pos pi_3.png')
+	plt.close()

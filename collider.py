@@ -110,21 +110,26 @@ def collide_rigid(bill, ring):
 def switch_to_masspoint(b, r):
 	vx = (b.m * b.v[0] + r.m * r.v[0]) / (b.m + r.m)
 	vy = (b.m * b.v[1] + r.m * r.v[1]) / (b.m + r.m)
-
+	v = (b.v * b.m + r.v * r.m)/(b.m + r.m)
 	x = (b.m * b.pos[0] + r.m * r.pos[0]) / (b.m + r.m)
 	y = (b.m * b.pos[1] + r.m * r.pos[1]) / (b.m + r.m)
-
+	pos = (b.pos * b.m + r.pos * r.m)/(b.m + r.m)
 	for k in [b, r]:
-		k.v = k.v - np.array([vx, vy])
-		k.pos = k.pos - np.array([x, y])
+		k.v = k.v - v
+		k.pos = k.pos - pos
+
+	print('Momentum:', b.v * b.m + r.v * r.m)
+	print('Masspoint:', b.pos * b.m + r.pos * r.m)
 
 
-def init_angle(bill, ring, fi=0):
+def init_angle(bill, ring, fi=0, velocity=1.):
 	# works properly in max range only with ring.pos=[0 0]
-	a = math.tan(fi)
-	bill.pos[0] = - (a * ring.r) / (a ** 2 + 1.)
-	bill.pos[1] = ring.r - ring.r / (a ** 2 + 1.)
-	bill.v = np.array([math.sin(fi), math.cos(fi)])
+	y = ring.r * (1. - math.cos(2 * fi)) * 0.5
+	x = - ring.r * math.sin(2 * fi) * 0.5
+	# in coordinates according to ring's center
+
+	bill.pos = np.array([x, y]) + ring.pos
+	bill.v = np.array([math.sin(fi) * velocity, math.cos(fi) * velocity])
 
 	if np.linalg.norm(ring.pos - bill.pos) > ring.r - bill.r:
 		print('Warning: Angle over limit!', fi)

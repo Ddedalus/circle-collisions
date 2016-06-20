@@ -27,10 +27,8 @@ def plot_bodies(b1, b2, title='Position'):
 	c1 = Circle((b1.pos[0], b1.pos[1]), radius=b1.r, fill=False, color='g')
 	c2 = Circle((b2.pos[0], b2.pos[1]), radius=b2.r, fill=False, color='r')
 
-	ax.add_patch(c1)
-	ax.add_patch(c2)
-	ax.add_patch(p1)
-	ax.add_patch(p2)
+	for p in [c1, c2, p1, p2]:
+		ax.add_patch(p)
 
 	ax.autoscale_view()
 	if Plotter.live is True:
@@ -65,14 +63,12 @@ def plot_compare_paths(pos_rigid, pos_inertial):
 
 	fig, ax = plt.subplots(1)
 
-	plt.plot(*zip(*pos_rigid), color='r', label='rigid')
-	plt.plot(*zip(*pos_inertial), color='g', label='inertial')
+	plt.plot(*zip(*pos_rigid), color='r', label='rigid', alpha=0.8)
+	plt.plot(*zip(*pos_inertial), color='g', label='inertial', alpha=0.8)
 	ax.legend(loc='upper right')
-	ax.autoscale_view()
-	ax.relim()
 
-	p1 = Circle(pos_rigid[0], radius=0.1, fill=True, color='r')
-	p2 = Circle(pos_inertial[0], radius=0.1, fill=True, color='g')
+	p1 = Circle(pos_rigid[0], radius=ax.get_ylim()[0] / 50., fill=True, color='r', alpha=0.8)
+	p2 = Circle(pos_inertial[0], radius=ax.get_ylim()[0] / 50., fill=True, color='g', alpha=0.8)
 
 	for p in [p1, p2]:
 		ax.add_patch(p)
@@ -81,6 +77,7 @@ def plot_compare_paths(pos_rigid, pos_inertial):
 	plt.axis('equal')
 	plt.xlabel('x')
 	plt.ylabel('y')
+	plt.autoscale()
 
 	if Plotter.live is True:
 		plt.show()

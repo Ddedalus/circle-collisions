@@ -6,7 +6,7 @@ import copy
 
 it = 20
 bill_0 = Body(1., 0., [0., 0.], [1., 1.])
-ring_0 = Body(2., 15., [0., 0.], [0., 0.])
+ring_0 = Body(2., 1.5, [0., 0.], [0., 0.])
 
 init_angle(bill_0, ring_0, math.pi / 5.0)
 plot_bodies(bill_0, ring_0, 'Initial position')

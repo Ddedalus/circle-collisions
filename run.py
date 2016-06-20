@@ -5,6 +5,12 @@ from Body import *
 from numpy.linalg import norm
 import math
 
+it = 100
+bill_0 = Body(1., 1., [0., 0.], [1., 1.])
+ring_0 = Body(2., 4., [0., 0.], [0., 0.])
+switch_to_masspoint(bill_0, ring_0)
+init_angle(bill_0, ring_0, math.pi/8.0)
+plot_bodies(bill_0, ring_0, 'Initial position')
 
 def angle(pos1, pos2, pos3):
 	cos = -0.5 * (norm(pos1 - pos3) ** 2 - norm(pos1 - pos2) ** 2 - norm(pos2 - pos3) ** 2) / (norm(

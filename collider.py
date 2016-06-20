@@ -69,14 +69,13 @@ def collide_rigid(bill, ring):
 	if norm(r.v) > 0.0000001:
 		print('Warning, ignoring ring velocity!')
 	
-	# print('Velocity of b', b.v)
 	if norm(b.v) == 0.:
 		print('Error, zero bill velocity!')
 		return 1
 	
 	A = norm(b.v)**2
 	B = 2 * (b.pos[0] * b.v[0] + b.pos[1] * b.v[1])
-	C = (norm(b.pos))**2 - (r.r - b.r)**2
+	C = (norm(b.pos - r.pos))**2 - (r.r - b.r)**2
 	D = B**2 - 4 * A * C        # discriminant of L**2 = (b.r - r.r)**2
 	t1 = (-B + D**0.5) * 0.5 / A
 	t2 = (-B - D**0.5) * 0.5 / A

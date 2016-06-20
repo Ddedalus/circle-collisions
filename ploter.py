@@ -1,10 +1,22 @@
 import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
 
-def plot_bodies(b1, b2, title = 'Position'):
+# matplotlib.use('Agg')
+
+
+class Plotter:
+	live = False
+
+
+font = {'family': 'serif',
+        'color': 'darkred',
+        'weight': 'normal',
+        'size': 16}
+
+
+def plot_bodies(b1, b2, title='Position'):
 	fig = plt.figure()
 	plt.axis('equal')
 	plt.title(title)
@@ -21,24 +33,70 @@ def plot_bodies(b1, b2, title = 'Position'):
 	ax.add_patch(p2)
 
 	ax.autoscale_view()
-	#ax.figure.canvas.draw()
-	plt.savefig('position graph.png')
+	if Plotter.live is True:
+		ax.figure.canvas.draw()
+	else:
+		plt.savefig('plot/position graph.png')
 	plt.close()
 
 
-def plot_pos(pos_b):
+def plot_single_path(pos_b, title=''):
+	fig = plt.figure()
 	plt.plot(*zip(*pos_b))
+	plt.autoscale()
 	plt.axis('equal')
-	plt.title("Position graph")
+	ax = fig.add_subplot(111)
+
+	p1 = Circle(pos_b[0], radius=0.1, fill=True, color='b')
+	plt.title("Path " + title)
 	plt.xlabel('x')
 	plt.ylabel('y')
-	plt.show()
+
+	ax.add_patch(p1)
+	if Plotter.live is True:
+		plt.show()
+	else:
+		plt.savefig('plot/path single ' + title.lower() + '.png')
+
+	plt.close()
 
 
-def plot_vs_collision(data, length, title='Data'):
+def plot_compare_paths(pos_rigid, pos_inertial):
+
+	fig, ax = plt.subplots(1)
+
+	plt.plot(*zip(*pos_rigid), color='r', label='rigid')
+	plt.plot(*zip(*pos_inertial), color='g', label='inertial')
+	ax.legend(loc='upper right')
+	ax.autoscale_view()
+	ax.relim()
+
+	p1 = Circle(pos_rigid[0], radius=0.1, fill=True, color='r')
+	p2 = Circle(pos_inertial[0], radius=0.1, fill=True, color='g')
+
+	for p in [p1, p2]:
+		ax.add_patch(p)
+
+	plt.title("Both paths")
+	plt.axis('equal')
+	plt.xlabel('x')
+	plt.ylabel('y')
+
+	if Plotter.live is True:
+		plt.show()
+	else:
+		plt.savefig('plot/path compare.png')
+
+	plt.close()
+
+
+def plot_vs_collision(data, title='Data'):
 	plt.title(title + ' vs collision number')
-	plt.plot(range(length), data)
+	plt.plot(range(len(data) - 1), data)
 	plt.axis('equal')
 	plt.xlabel('collision')
 	plt.ylabel(title.lower())
-	plt.show()
+	if Plotter.live is True:
+		plt.show()
+	else:
+		plt.savefig('plot/collision vs ' + title.lower() + '.png')

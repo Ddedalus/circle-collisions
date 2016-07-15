@@ -2,11 +2,12 @@ import numpy as np
 
 
 class Body:
-	def __init__(self, mass, radius, position=[0.0, 0.0], velocity=[0.0, 0.0]):
+	def __init__(self, mass, radius, position=[0.0, 0.0], velocity=[0.0, 0.0], time=0):
 		"""m, r, pos, v"""
 		self.m, self.r = float(mass), float(radius)
 		self.pos = np.array([float(p) for p in position])
 		self.v = np.array([float(v) for v in velocity])
+		self.time = time
 		self.new_pos = None		# should be defined as np.array's
 		self.new_v = None
 
